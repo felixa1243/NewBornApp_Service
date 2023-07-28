@@ -38,4 +38,19 @@ class MotherController extends Controller
             return response()->json($response, 400);
         }
     }
+
+    public function findMotherByName(Request $request)
+    {
+        $name = $request->get("name");
+        $data = $this->motherService->findByName($name)->all();
+        $response = new SuccessResponse("200", $data);
+        return response()->json($response);
+    }
+
+    public function findMotherById($id)
+    {
+        $data = (array)$this->motherService->findById($id);
+        $response = new SuccessResponse("200", $data);
+        return response()->json(["data"=>$response]);
+    }
 }

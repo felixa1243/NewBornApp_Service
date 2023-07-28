@@ -4,13 +4,14 @@ namespace App\Repositories;
 
 use App\Models\Mother;
 use App\Repositories\interfaces\IMotherRepository;
+use Illuminate\Support\Facades\DB;
 
 class MotherRepository implements IMotherRepository
 {
 
     public function save(array $mother)
     {
-        return Mother::create(["name"=>$mother["name"],"birth_day"=>$mother["birth_day"]]);
+        return Mother::create(["name" => $mother["name"], "birth_day" => $mother["birth_day"]]);
     }
 
     public function delete(string $id)
@@ -25,11 +26,14 @@ class MotherRepository implements IMotherRepository
 
     public function findById(string $id)
     {
-        return Mother::where("id", $id);
+        return DB::table("mothers")
+            ->where("id", "=", $id)->get()->first();
     }
 
     public function findByName(string $name)
     {
-        return Mother::where("name", $name);
+        return DB::table("mothers")
+            ->whereRaw("LOWER(name) LIKE ?", ["%" . strtolower($name) . "%"]);
     }
+
 }

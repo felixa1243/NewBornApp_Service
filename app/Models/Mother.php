@@ -7,4 +7,5 @@ class Mother extends Model
 {
     use Uuids,HasFactory;
     protected $fillable = ["name", "birth_day"];
+    protected $perPage = 10;
 }
