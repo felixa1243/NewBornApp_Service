@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("mother", function ($table) {
+        Schema::create("mothers", function ($table) {
             $table->uuid("id")->primary();
             $table->string("name");
             $table->date("birth_day");
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp("updated_at")->default(DB::raw("CURRENT_TIMESTAMP"));
         });
 
-        Schema::create("infant", function ($table) {
+        Schema::create("infants", function ($table) {
             $table->uuid("id")->primary();
             $table->string("name");
             $table->enum("gender", ["male", "female"]);
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->date("gestational_begin");
             $table->uuid("mother_id");
             $table->string("description")->nullable();
-            $table->foreign("mother_id")->references("id")->on("mother");
+            $table->foreign("mother_id")->references("id")->on("mothers");
             // auto-generated columns
             $table->timestamp("created_at")->default(DB::raw("CURRENT_TIMESTAMP"));
             $table->timestamp("updated_at")->default(DB::raw("CURRENT_TIMESTAMP"));

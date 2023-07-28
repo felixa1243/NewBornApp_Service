@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\interfaces;
 
 interface IMotherRepository{
     public function save(array $motherData);

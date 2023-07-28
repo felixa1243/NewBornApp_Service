@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\response;
 
 abstract class CommonResponse
 {
-    protected string $status;
-    protected string $code;
-    protected array $data;
-    public function __construct(string $status,string $code,array $data)
+    public string $status;
+    public string $code;
+    public array|null $data;
+
+    public function __construct(string $status, string $code, array|null $data)
     {
         $this->status = $status;
         $this->data = $data;
     }
+
 }

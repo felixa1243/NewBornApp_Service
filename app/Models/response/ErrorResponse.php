@@ -1,10 +1,16 @@
 <?php
-namespace App\Models;
 
-class ErrorResponse extends CommonResponse{
+namespace App\Models\response;
 
-    public function __construct($code,array $data)
+use Exception;
+
+class ErrorResponse extends CommonResponse
+{
+    public string $error;
+
+    public function __construct($code, string $err)
     {
-        parent::__construct("error",$code,$data);
+        parent::__construct("error", $code, null);
+        $this->error = $err;
     }
 }

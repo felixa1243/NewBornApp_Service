@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Models;
-
-use App\Models\CommonResponse;
+namespace App\Models\response;
 
 class SuccessResponse extends CommonResponse
 {
