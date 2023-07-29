@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\response\SuccessResponse;
-use App\Services\IMotherService;
+use App\Services\interfaces\IMotherService;
 use App\Services\MotherService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function Termwind\renderUsing;
 
 class MotherController extends Controller
 {
@@ -28,7 +29,7 @@ class MotherController extends Controller
     {
         $data = $this->motherService->create($request);
         $response = new SuccessResponse("201", $data);
-        return response()->json($response);
+        return response()->json($response, 201);
     }
 
     public function findMotherByName(Request $request)
@@ -43,6 +44,22 @@ class MotherController extends Controller
     {
         $data = (array)$this->motherService->findById($id);
         $response = new SuccessResponse("200", $data);
+        return response()->json($response);
+    }
+
+    public function update($id, Request $request)
+    {
+        $data = $this->motherService->update($id, $request);
+        $response = new SuccessResponse("201", $data);
+        return response()->json($response, 201);
+    }
+
+    public function delete($id)
+    {
+        $response = new SuccessResponse("204", [
+            "message" => "mother with id: " . $id . " successfully deleted"
+        ]);
+        $this->motherService->remove($id);
         return response()->json($response);
     }
 }

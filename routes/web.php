@@ -23,7 +23,13 @@ $router->get("/mothers/q", "MotherController@findMotherByName");
 $router->get("/mothers/{id}", "MotherController@findMotherById");
 $router->get("/mothers", "MotherController@getAll");
 $router->post("/mothers", "MotherController@create");
+$router->put("/mothers/{id}", "MotherController@update");
+$router->delete("/mothers/{id}", "MotherController@delete");
 
 //infants router
+$router->get("/infants/q", "InfantsController@getAllByDateRange");
+$router->get("/infants/{id}", "InfantsController@getById");
 $router->get("/infants", "InfantsController@getAll");
 $router->post("/infants", "InfantsController@create");
+$router->put("/infants/{id}", "InfantsController@update");
+$router->delete("/infants/{id}", "InfantsController@delete");

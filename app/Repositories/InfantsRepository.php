@@ -25,9 +25,9 @@ class InfantsRepository implements IinfantsRepository
     }
 
 
-    public function findById(string $id): array
+    public function findById(string $id)
     {
-        return (array)DB::table("infants")->where("id", $id)->first();
+        return Infants::find($id);
     }
 
     public function findByName(string $name): array
@@ -37,11 +37,19 @@ class InfantsRepository implements IinfantsRepository
             ->get()->all();
     }
 
-    public function findByRangeOfBirthDay(string $startBirthday, string $endBirthday)
+    public function findByRangeOfBirthDay(string $startBirthday, string $endBirthday, int $page)
     {
         return DB::table("infants")
             ->whereBetween("birth_day", [$startBirthday, $endBirthday])
-            ->get();
+            ->paginate(10, ["*"], "page", $page);
     }
+
+    public function update(string $id, array $data)
+    {
+        $infant = Infants::find($id);
+        $infant->update($data);
+        return $infant;
+    }
+
 
 }

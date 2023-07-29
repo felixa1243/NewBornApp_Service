@@ -6,9 +6,9 @@ use App\Repositories\InfantsRepository;
 use App\Repositories\interfaces\IinfantsRepository;
 use App\Repositories\interfaces\IMotherRepository;
 use App\Repositories\MotherRepository;
-use App\Services\IinfantsService;
-use App\Services\IMotherService;
 use App\Services\InfantsService;
+use App\Services\interfaces\IinfantsService;
+use App\Services\interfaces\IMotherService;
 use App\Services\MotherService;
 use Illuminate\Support\ServiceProvider;
 

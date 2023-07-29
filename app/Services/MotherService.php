@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Repositories\interfaces\IMotherRepository;
 use App\Repositories\MotherRepository;
-use DateTime;
+use App\Services\interfaces\IMotherService;
+use App\Utils\DateFormater;
+use App\Validators\MotherValidator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MotherService implements IMotherService
 {
@@ -25,45 +26,21 @@ class MotherService implements IMotherService
 
     public function create(Request $request): array
     {
-
-        $validator = Validator::make($request->all(), [
-            "name" => "required|min:3|max:100",
-            "birth_day" => "required|date"
-        ]);
-
-        //Validate birthday if it's age is > 18
-        $validator->after(function ($validator) use ($request) {
-            $birthDay = $request->json("birth_day");
-            $birthDayDate = new DateTime($birthDay);
-            $currentDate = new DateTime();
-            $age = $currentDate->diff($birthDayDate)->y;
-            if ($age < 18) {
-                $validator->errors()->add('birth_day', 'The person must be at least 18 years old.');
-            }
-        });
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        $name = $request->json("name");
-        $birthDay = $request->json("birth_day");
-
-        $createdMother = $this->motherRepository->save([
-            "name" => $name,
-            "birth_day" => $birthDay
-        ]);
-
-        return [
-            "id" => $createdMother->id,
-            "name" => $createdMother->name,
-            "birth_day" => $createdMother->birth_day
-        ];
+        MotherValidator::validate($request);
+        return $this->save($request);
     }
 
     public function findById(string $id)
     {
-        return $this->motherRepository->findById($id);
+        $result = $this->motherRepository->findById($id);
+        if (!$result) {
+            throw new NotFoundHttpException("mother with id " . $id . "is not found");
+        }
+        return [
+            "id" => $result->id,
+            "name" => $result->name,
+            "birth_day" => $result->birth_day
+        ];
     }
 
     public function findByName(string $name)
@@ -71,5 +48,44 @@ class MotherService implements IMotherService
         return $this->motherRepository->findByName($name)->get();
     }
 
+    public function remove(string $id)
+    {
+        // find mother by id, if not get the result then throw exception
+        $this->findById($id);
+        return $this->motherRepository->delete($id);
+    }
+
+    public function update(string $id, Request $request)
+    {
+        // find mother by id, if not get the result then throw exception
+        $this->findById($id);
+        MotherValidator::validate($request);
+
+        $updatedMother = $this->save($request, "update", $id);
+
+        return [
+            "id" => $updatedMother->id,
+            "name" => $updatedMother->name,
+            "birth_day" => DateFormater::toLocal($updatedMother->birth_day)
+        ];
+    }
+
+    private function save(Request $request, string $action = "create", $id = null)
+    {
+        MotherValidator::validate($request);
+        $data = [
+            "name" => $request->json("name"),
+            "birth_day" => DateFormater::toUtc($request->json("birth_day"))
+        ];
+        $createdMother = $this->motherRepository->save($data);
+        if ($action == "update" && $id) {
+            return $this->motherRepository->update($id, $data);
+        }
+        return [
+            "id" => $createdMother->id,
+            "name" => $createdMother->name,
+            "birth_day" => DateFormater::toLocal($createdMother->birth_day)
+        ];
+    }
 
 }

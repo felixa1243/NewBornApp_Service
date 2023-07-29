@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\response\SuccessResponse;
-use App\Services\IinfantsService;
 use App\Services\InfantsService;
+use App\Services\interfaces\IinfantsService;
 use Illuminate\Http\Request;
 
 class InfantsController extends Controller
@@ -27,7 +27,39 @@ class InfantsController extends Controller
     public function create(Request $request)
     {
         $data = $this->infantsService->create($request);
-        $response = new SuccessResponse("201", (array)$data);
+        $response = new SuccessResponse("201", $data);
         return response()->json($response, 201);
     }
+
+    public function getAllByDateRange(Request $request)
+    {
+        $infants = $this->infantsService->findByDateRange($request);
+        return response()->json($infants);
+    }
+
+    public function update($id, Request $request)
+    {
+        $data = $this->infantsService->update($id, $request);
+        $response = new SuccessResponse("201", $data);
+        return response()->json($response);
+    }
+
+    public function getById($id)
+    {
+        $data = $this->infantsService->findById($id);
+        $response = new SuccessResponse("200", $data);
+        return response()->json($response);
+
+    }
+
+    public
+    function delete($id)
+    {
+        $response = new SuccessResponse("204", [
+            "message" => "infants with id: " . $id . " successfully deleted"
+        ]);
+        $this->infantsService->remove($id);
+        return response()->json($response);
+    }
+
 }

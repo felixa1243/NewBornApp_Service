@@ -3,5 +3,5 @@
 namespace App\Repositories\interfaces;
 interface IinfantsRepository extends CrudRepository
 {
-    public function findByRangeOfBirthDay(string $startbirthDay,string $endBirthday);
+    public function findByRangeOfBirthDay(string $startbirthDay, string $endBirthday, int $page);
 }
