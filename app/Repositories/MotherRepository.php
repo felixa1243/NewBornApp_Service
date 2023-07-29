@@ -26,14 +26,20 @@ class MotherRepository implements IMotherRepository
 
     public function findById(string $id)
     {
-        return DB::table("mothers")
-            ->where("id", "=", $id)->get()->first();
+        return Mothers::find($id);
     }
 
     public function findByName(string $name)
     {
         return DB::table("mothers")
             ->whereRaw("LOWER(name) LIKE ?", ["%" . strtolower($name) . "%"]);
+    }
+
+    public function update(string $id, array $data)
+    {
+        $mothers = $this->findById($id);
+        $mothers->update($data);
+        return $mothers;
     }
 
 }

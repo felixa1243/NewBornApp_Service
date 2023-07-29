@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->integer("height");
             $table->integer("weight");
             $table->string("description")->nullable();
-            $table->foreign("mother_id")->references("id")->on("mothers");
+            $table->foreign("mother_id")->references("id")->on("mothers")->onDelete("cascade");
             // auto-generated columns
             $table->timestamp("created_at")->default(DB::raw("CURRENT_TIMESTAMP"));
             $table->timestamp("updated_at")->default(DB::raw("CURRENT_TIMESTAMP"));

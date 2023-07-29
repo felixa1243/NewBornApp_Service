@@ -4,10 +4,15 @@ namespace App\Services;
 
 use App\Repositories\InfantsRepository;
 use App\Repositories\interfaces\IinfantsRepository;
-use DateTime;
+use App\Services\interfaces\IinfantsService;
+use App\Services\interfaces\IMotherService;
+use App\Utils\DateFormater;
+use App\Validators\InfantsValidator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class InfantsService implements IinfantsService
 {
@@ -28,47 +33,25 @@ class InfantsService implements IinfantsService
 
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "name" => "required|min:3|max:100",
-            "gender" => "required|in:male,female",
-            "height" => "required|numeric",
-            "weight" => "required|numeric",
-            "mother_id" => "required",
-            "birth_day" => "required|date",
-            "gestational_begin" => "required|date",
-        ]);
-        // validate if gestational age is > 30
-        $validator->after(function ($validator) use ($request) {
-            $birthday = new DateTime($request->json("birth_day"));
-            $gestational = new DateTime($request->json("gestational_begin"));
-            // Calculate the difference between gestational begin and birth day in weeks
-            $interval = $birthday->diff($gestational);
-            $gestationalAgeWeeks = $interval->days / 7;
-
-            // Check if gestational age is greater than 30 weeks
-            if ($gestationalAgeWeeks <= 30) {
-                $validator->errors()->add('gestational_begin', 'Gestational age must be greater than 30 weeks.');
-            }
-        });
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        $newbornInfants = $this->repository->save($request->all());
+        $newbornInfants = $this->save($request);
         return [
             "id" => $newbornInfants->id,
             "name" => $newbornInfants->name,
             "gender" => $newbornInfants->gender,
             "height" => $newbornInfants->height,
             "weight" => $newbornInfants->height,
-            "birth_day" => $newbornInfants->birth_day,
-            "gestational_begin" => $newbornInfants->gestational_begin
+            "birth_day" => DateFormater::toLocal($newbornInfants->birth_day),
+            "gestational_begin" => DateFormater::toLocal($newbornInfants->gestational_begin)
         ];
     }
 
     public function findById(string $id)
     {
-        return $this->repository->findById($id);
+        $result = $this->repository->findById($id);
+        if (!$result) {
+            throw new NotFoundHttpException("The infant's with id" . $id . "is not found");
+        }
+        return $result;
     }
 
     public function findByName(string $name)
@@ -76,4 +59,59 @@ class InfantsService implements IinfantsService
         return $this->repository->findByName($name);
     }
 
+    public function findByDateRange(Request $request)
+    {
+        //separator for formating
+        $separator = ["from" => "-", "to" => "-"];
+        $dateFrom = $request->get("from") ?? DateFormater::todayToLocal();
+        $dateTo = $request->get("to") ?? DateFormater::todayToLocal();
+        $page = $request->get("page") ?? 1;
+        $startDate = DateFormater::toUtc($dateFrom, $separator);
+        $endDate = DateFormater::toUtc($dateTo, $separator);
+        return $this->repository->findByRangeOfBirthDay($startDate, $endDate, $page);
+    }
+
+    public function remove(string $id): int
+    {
+        //find the member with id, if not exists throw exception
+        $this->repository->findById($id);
+        return $this->repository->delete($id);
+    }
+
+    public function update(string $id, Request $request)
+    {
+        //find the member with id, if not exists throw exception
+        $this->findById($id);
+        $newbornInfants = $this->save($request, "update", $id);
+        return [
+            "id" => $newbornInfants->id,
+            "name" => $newbornInfants->name,
+            "gender" => $newbornInfants->gender,
+            "height" => $newbornInfants->height,
+            "weight" => $newbornInfants->height,
+            "birth_day" => DateFormater::toLocal($newbornInfants->birth_day),
+            "gestational_begin" => DateFormater::toLocal($newbornInfants->gestational_begin)
+        ];
+    }
+
+    function save(Request $request, string $action = "create", $id = null)
+    {
+        // Validate input
+        InfantsValidator::validate($request, $this->motherService);
+        $birth_day = DateFormater::toUtc($request->json("birth_day"));
+        $gestational_begin = DateFormater::toUtc($request->json("gestational_begin"));
+        $data = [
+            "name" => $request->json("name"),
+            "gender" => $request->json("gender"),
+            "height" => $request->json("height"),
+            "weight" => $request->json("height"),
+            "mother_id" => $request->json("mother_id"),
+            "birth_day" => $birth_day,
+            "gestational_begin" => $gestational_begin
+        ];
+        if ($action == "update" && $id) {
+            return $this->repository->update($id, $data);
+        }
+        return $this->repository->save($data);
+    }
 }
