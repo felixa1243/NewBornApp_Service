@@ -55,7 +55,8 @@ class InfantsService implements IinfantsService
             "weight" => $result->weight,
             "mother_id" => $result->mother_id,
             "birth_day" => $result->birth_day,
-            "gestational_begin" => $result->gestational_begin
+            "gestational_begin" => $result->gestational_begin,
+            "gestational_age_weeks" => $result->gestational_age_weeks
         ];
     }
 

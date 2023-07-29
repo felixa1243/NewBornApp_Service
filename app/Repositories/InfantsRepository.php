@@ -27,8 +27,11 @@ class InfantsRepository implements IinfantsRepository
 
     public function findById(string $id)
     {
-        return Infants::find($id);
+        return Infants::select('*', DB::raw('FLOOR(DATEDIFF(birth_day, gestational_begin) / 7) AS gestational_age_weeks'))
+            ->find($id);
     }
+
+
 
     public function findByName(string $name): array
     {
