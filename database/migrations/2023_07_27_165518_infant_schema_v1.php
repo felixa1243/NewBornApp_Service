@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -28,6 +27,8 @@ return new class extends Migration
             $table->datetime("birth_day");
             $table->date("gestational_begin");
             $table->uuid("mother_id");
+            $table->integer("height");
+            $table->integer("weight");
             $table->string("description")->nullable();
             $table->foreign("mother_id")->references("id")->on("mothers");
             // auto-generated columns

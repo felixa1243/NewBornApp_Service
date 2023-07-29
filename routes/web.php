@@ -17,8 +17,13 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+//mother router
+
 $router->get("/mothers/q", "MotherController@findMotherByName");
 $router->get("/mothers/{id}", "MotherController@findMotherById");
 $router->get("/mothers", "MotherController@getAll");
 $router->post("/mothers", "MotherController@create");
 
+//infants router
+$router->get("/infants", "InfantsController@getAll");
+$router->post("/infants", "InfantsController@create");

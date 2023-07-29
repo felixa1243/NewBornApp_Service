@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Infants;
 use Illuminate\Database\Seeder;
-use App\Models\Mother;
+use App\Models\Mothers;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('MotherSeeder');
-        Mother::factory(15)->create();
+        Mothers::factory(15)->create();
+        Infants::factory(15)->create();
     }
 }

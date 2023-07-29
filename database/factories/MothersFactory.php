@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Mother;
+use App\Models\Mothers;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-class MotherFactory extends Factory
+class MothersFactory extends Factory
 {
 
-    protected $model = Mother::class;
+    protected $model = Mothers::class;
 
     public function definition()
     {

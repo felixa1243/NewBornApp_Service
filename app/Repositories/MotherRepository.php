@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Mother;
+use App\Models\Mothers;
 use App\Repositories\interfaces\IMotherRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -11,17 +11,17 @@ class MotherRepository implements IMotherRepository
 
     public function save(array $mother)
     {
-        return Mother::create(["name" => $mother["name"], "birth_day" => $mother["birth_day"]]);
+        return Mothers::create($mother);
     }
 
     public function delete(string $id)
     {
-        return Mother::destroy($id);
+        return Mothers::destroy($id);
     }
 
     public function findAll($page)
     {
-        return Mother::paginate($page);
+        return Mothers::paginate(10, ["*"], "page", $page);
     }
 
     public function findById(string $id)
