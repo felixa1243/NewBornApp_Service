@@ -1,0 +1,14 @@
+PUT /infants/03abc63f-017d-4211-861f-809287245956 HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 213
+
+{
+    "name":"Nene Ali",
+    "gender":"female",
+    "height":45,
+    "weight":3,
+    "birth_day":"29-07-2023",
+    "gestational_begin":"12-07-2022",
+    "mother_id":"27105630-6130-4be3-abd9-3b7cb8fa76af"
+}

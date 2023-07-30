@@ -1,0 +1,9 @@
+PUT /mothers/0189370e-7c0d-42cb-83ef-d4a0ade748be HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 56
+
+{
+    "name":"Julian",
+    "birth_day":"03-07-2001"
+}

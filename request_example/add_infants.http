@@ -1,0 +1,14 @@
+POST /infants HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 209
+
+{
+    "name":"nami",
+    "gender":"female",
+    "height":45,
+    "weight":3,
+    "birth_day":"29-07-2023",
+    "gestational_begin":"12-07-2022",
+    "mother_id":"0d99a02a-732f-491b-80dd-80f05eadb78d"
+}

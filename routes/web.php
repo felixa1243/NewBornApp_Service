@@ -33,3 +33,4 @@ $router->get("/infants", "InfantsController@getAll");
 $router->post("/infants", "InfantsController@create");
 $router->put("/infants/{id}", "InfantsController@update");
 $router->delete("/infants/{id}", "InfantsController@delete");
+$router->get("/infants/analytics", "InfantsController@getYearlyAnalytics");

@@ -1,0 +1,2 @@
+GET /infants/analytics?year=2023 HTTP/1.1
+Host: localhost:8000

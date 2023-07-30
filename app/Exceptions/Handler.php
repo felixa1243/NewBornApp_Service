@@ -18,35 +18,23 @@ class Handler extends ExceptionHandler
         ValidationException::class,
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param \Throwable $exception
-     * @return void
-     *
-     * @throws \Exception
-     */
     public function report(Throwable $exception)
     {
         parent::report($exception);
     }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Throwable $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     *
-     * @throws \Throwable
-     */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                "error" => true,
+                "message" => $exception->getMessage()
+            ], 400);
+        }
+
         return response()->json([
             "error" => true,
             "message" => $exception->getMessage()
-        ]);
+        ], 500);
     }
 }

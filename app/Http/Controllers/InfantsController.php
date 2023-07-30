@@ -52,13 +52,19 @@ class InfantsController extends Controller
 
     }
 
-    public
-    function delete($id)
+    public function delete($id)
     {
         $response = new SuccessResponse("204", [
             "message" => "infants with id: " . $id . " successfully deleted"
         ]);
         $this->infantsService->remove($id);
+        return response()->json($response);
+    }
+
+    public function getYearlyAnalytics(Request $request)
+    {
+        $data = $this->infantsService->getAnalytics($request);
+        $response = new SuccessResponse("200", $data);
         return response()->json($response);
     }
 

@@ -1,0 +1,9 @@
+POST /mothers HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 60
+
+{
+    "name":"surminah 2",
+    "birth_day":"03-07-2001"
+}

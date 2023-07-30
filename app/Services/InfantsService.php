@@ -3,17 +3,18 @@
 namespace App\Services;
 
 use App\Repositories\InfantsRepository;
-use App\Repositories\interfaces\IinfantsRepository;
+use App\Repositories\interfaces\IInfantsRepository;
 use App\Services\interfaces\IinfantsService;
 use App\Services\interfaces\IMotherService;
 use App\Utils\DateFormater;
 use App\Validators\InfantsValidator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class InfantsService implements IinfantsService
 {
-    private IinfantsRepository $repository;
+    private IInfantsRepository $repository;
     private IMotherService $motherService;
 
     public function __construct(InfantsRepository $repository, MotherService $motherService)
@@ -120,4 +121,11 @@ class InfantsService implements IinfantsService
         }
         return $this->repository->save($data);
     }
+
+    public function getAnalytics(Request $request)
+    {
+        $year = $request->get("year") ?? Carbon::now()->format("Y");
+        return $this->repository->getYearlyAnalytics($year);
+    }
+
 }

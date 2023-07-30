@@ -1,0 +1,9 @@
+DELETE /infants/03abc63f-017d-4211-861f-809287245956 HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 60
+
+{
+    "name":"surminah 2",
+    "birth_day":"2001/07/03"
+}

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Infants;
 use App\Models\Mothers;
+use App\Utils\DateFormater;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -13,7 +14,8 @@ class InfantsFactory extends Factory
 
     public function definition()
     {
-        $birthday = $this->faker->dateTimeBetween("-300 weeks")->format("Y-m-d");
+        // get current day
+        $birthday = DateFormater::todayToLocal();
         $birthdayDateTime = new DateTime($birthday);
 
         $earliestGestationalBegin = clone $birthdayDateTime;

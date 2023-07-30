@@ -1,0 +1,9 @@
+DELETE /mothers/0d99a02a-732f-491b-80dd-80f05eadb78d HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+Content-Length: 60
+
+{
+    "name":"surminah 2",
+    "birth_day":"2001/07/03"
+}

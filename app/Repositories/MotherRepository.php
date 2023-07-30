@@ -26,7 +26,7 @@ class MotherRepository implements IMotherRepository
 
     public function findById(string $id)
     {
-        return Mothers::find($id)->get()->first();
+        return Mothers::find($id);
     }
 
     public function findByName(string $name)
